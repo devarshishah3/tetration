@@ -54,11 +54,9 @@ def CreateRestClient():
 
 '''
 ====================================================================================
-Upload User Annotation CSV
+Get Hosts with empty hostnames
 ------------------------------------------------------------------------------------
 '''
-
-
 def GetUnnamedHosts(rc,offset):
     req_payload = {
         "filter": {
@@ -88,6 +86,11 @@ def GetUnnamedHosts(rc,offset):
     else:
         return resp.json()
 
+'''
+====================================================================================
+Resolve empty hostnames by IP Address
+------------------------------------------------------------------------------------
+'''
 def ResolveUnnamedHosts(inventoryList):
     resolved_hosts = []
     for host in inventoryList:
@@ -102,6 +105,11 @@ def ResolveUnnamedHosts(inventoryList):
             continue
     return resolved_hosts
 
+'''
+====================================================================================
+Create annotation csv and push to Tetration
+------------------------------------------------------------------------------------
+'''
 def SendAnnotationUpdates(rc,resolved_hosts):
     for host in resolved_hosts:
         user_annotations = dict([(k,v) for k,v in host.items() if k.startswith(('ip', 'vrf', 'user_')) ])
