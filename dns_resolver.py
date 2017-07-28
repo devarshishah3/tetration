@@ -100,7 +100,6 @@ def ResolveUnnamedHosts(inventoryList):
         except:
             print("Couldn't resolve IP: {ip}".format(ip=host["ip"]))
             continue
-    print json.dumps(resolved_hosts,sort_keys=True,indent=4)
     return resolved_hosts
 
 def SendAnnotationUpdates(rc,resolved_hosts):
