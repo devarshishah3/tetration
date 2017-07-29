@@ -118,7 +118,7 @@ def SendAnnotationUpdates(rc,resolved_hosts):
         row['VRF'] = row.pop('vrf_name')
         user_annotations.append(row)
         if headerFlag == 0:
-            headers = [key for key in row if k != 'IP' and key != 'VRF']
+            headers = [key for key in row if key != 'IP' and key != 'VRF']
             headers.insert(0,'VRF')
             headers.insert(0,'IP')
     with open('annotations.csv', 'wb') as csvfile:
