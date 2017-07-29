@@ -45,8 +45,6 @@ TETRATION_SEARCH_LIMIT = args.limit if args.limit else TETRATION_SEARCH_LIMIT
 Class Constructor
 ------------------------------------------------------------------------------------
 '''
-
-
 def CreateRestClient():
     rc = RestClient(TETRATION_API_URL,
                     credentials_file=TETRATION_API_CRED_PATH, verify=False)
