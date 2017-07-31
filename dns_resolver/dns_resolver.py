@@ -96,7 +96,7 @@ def ResolveUnnamedHosts(inventoryList):
         try:
             addr = dns.reversename.from_address(host["ip"])
             host_name = str(dns.resolver.query(addr,"PTR")[0])
-            host.update({"user_" + TETRATION_HOST_NAME_USER_ANNOTATION: host_name })
+            host.update({"user_" + TETRATION_HOST_NAME_USER_ANNOTATION: host_name[:-1] })
             resolved_hosts.append(host)
         except:
             print("Couldn't resolve IP: {ip}".format(ip=host["ip"]))
@@ -144,8 +144,9 @@ def main():
         unnamed_hosts = GetUnnamedHosts(rc,offset)
         resolved_hosts = ResolveUnnamedHosts(unnamed_hosts["results"])
         SendAnnotationUpdates(rc,resolved_hosts)
-        offset = unnamed_hosts["offset"]
-        if offset is None:
+        try:
+            offset = unnamed_hosts["offset"]
+        except NameError:
             break
         time.sleep(2)
 
