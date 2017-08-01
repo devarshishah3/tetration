@@ -146,7 +146,7 @@ def main():
         SendAnnotationUpdates(rc,resolved_hosts)
         try:
             offset = unnamed_hosts["offset"]
-        except NameError:
+        except:
             break
         time.sleep(2)
 
