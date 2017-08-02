@@ -1,6 +1,0 @@
-Network,Comment,ParentScope,Restricted
-10.0.0.0/12,Cisco Labs,Default:Datacenter,TRUE
-10.30.0.0/16,Cisco Labs,Default:Datacenter,TRUE
-10.32.0.0/12,Cisco Labs,Default:Datacenter,TRUE
-10.116.0.0/14,Cisco Remote Access,Default:Datacenter,TRUE
-10.227.0.0/16,Cisco Remote Access,Default:Datacenter,TRUE
