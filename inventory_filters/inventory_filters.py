@@ -57,22 +57,25 @@ def CreateInventoryFilters(rc,scopes):
     with open(args.csv) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            if row['Comment'] in inventoryDict:
-                if inventoryDict[row['Comment']]['app_scope_id'] != GetAppScopeId(scopes,row['ParentScope']):
-                    print("Parent scope for {network} does not match previous definition".format(network=row['Network']))
-                    continue
-                inventoryDict[row['Comment']]['query'].append({
-                    "type": "subnet",
-                    "field": "ip",
-                    "value": row['Network']
-                })
-            else:
+            if row['Comment'] not in inventoryDict:
                 inventoryDict[row['Comment']] = {}
                 inventoryDict[row['Comment']]['app_scope_id'] = GetAppScopeId(scopes,row['ParentScope'])
                 inventoryDict[row['Comment']]['name'] = row['Comment']
                 inventoryDict[row['Comment']]['primary'] = row['Restricted'].lower()
-                inventoryDict[row['Comment']]['query'] = []
-    #print(json.dumps(inventoryDict,sort_keys=True,indent=4))
+                inventoryDict[row['Comment']]['query'] = {
+                    "type" : "or",
+                    "filters" : []
+                }
+            if inventoryDict[row['Comment']]['app_scope_id'] != GetAppScopeId(scopes,row['ParentScope']):
+                print("Parent scope for {network} does not match previous definition".format(network=row['Network']))
+                continue
+            inventoryDict[row['Comment']]['query']['filters'].append({
+                "type": "subnet",
+                "field": "ip",
+                "value": row['Network']
+            })
+
+    print(json.dumps(inventoryDict,sort_keys=True,indent=4))
     return inventoryDict
 
 def PushInventoryFilters(rc,inventoryFilters):
