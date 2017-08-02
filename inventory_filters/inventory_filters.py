@@ -8,7 +8,6 @@ import sys
 import os
 import argparse
 import time
-import dns.resolver, dns.reversename
 import csv
 
 # =================================================================================
