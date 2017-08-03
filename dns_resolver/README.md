@@ -9,3 +9,22 @@ This script requires the following pip libraries be installed
 
 - tetpyclient
 - dns
+
+```
+################################################################################################
+# Arguments:                                                                                   #
+#                                                                                              #
+# The following arguments can be passed into the script or defined within the script by        #
+# variable name                                                                                #
+#                                                                                              #
+# ArgName (Script Variable Name)                                                               #
+# --url (TETRATION_API_URL): Tetration URL Ex: https://<Tetration IP>                          #
+# --credential (TETRATION_API_CRED_PATH): Path to credentials.json                             #
+# --annotation (TETRATION_HOST_NAME_USER_ANNOTATION): User Annotation field to track hostnames #
+# --scope (TETRATION_SCOPE_NAME): Scope name used for inventory search                         #
+# --limit (TETRATION_SEARCH_LIMIT): Pagination limit for inventory search                      #
+################################################################################################
+
+python --url 'https://<tetration ip or hostname>' --credential '<path to credential json>' --annotation 'Owner' --scope 'Default' --limit 100
+
+```

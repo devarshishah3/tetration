@@ -20,8 +20,8 @@ requests.packages.urllib3.disable_warnings()
 # GLOBALS
 # ------------------------------------------------------------------------------------
 
-TETRATION_API_URL = "https://172.17.0.4"
-TETRATION_API_CRED_PATH = 'perseus-admin.json'
+TETRATION_API_URL = "https://<tetration IP or Hostname>"
+TETRATION_API_CRED_PATH = '<tetration credential file>.json'
 TETRATION_HOST_NAME_USER_ANNOTATION = 'Hostname'
 TETRATION_SCOPE_NAME = 'Default'
 TETRATION_SEARCH_LIMIT = 20
