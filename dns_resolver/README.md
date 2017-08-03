@@ -10,6 +10,7 @@ This script requires the following pip libraries be installed
 - tetpyclient
 - dns
 
+## Example Usage
 ```
 ################################################################################################
 # Arguments:                                                                                   #
