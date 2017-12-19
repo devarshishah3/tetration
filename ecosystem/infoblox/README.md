@@ -21,8 +21,8 @@ This Script supports two types of modes
 
 1. Manual setup actions: (One time tasks for setting up initial integration):
     * creating inventory filter csv file
-    * associating inheritable extensible attributes with parent networks
     * exporting networks from infoblox to csv
+    * associating inheritable extensible attributes with parent networks
 2. Recurring actions: (Ran routinely at defined poll interval)
     * update inventory filters
     * update annotations
@@ -51,4 +51,11 @@ python infoblox-integration.py --createNetworkCsv 'networks.csv'
 Run this manual action to add an inheritable extensible attribute to a list of networks (this requires elevated account privileges)
 <pre>
 python infoblox-integration.py --importEaCsv 'networks.csv' --importEaName 'Location' --importEaValue 'US-DC-1'
+</pre>
+
+<b>Recurring Actions</b>
+
+All settings/options for recurring actions should be made in the settings.yml file
+<pre>
+python infoblox-integration.py
 </pre>
