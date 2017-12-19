@@ -4,7 +4,6 @@ import json
 import requests.packages.urllib3
 import sys
 import os
-import argparse
 import time
 import csv
 

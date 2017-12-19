@@ -132,7 +132,9 @@ def push_network_filters(filename):
     logger.info("Creating inventory filters from csv")
     inventoryFilters = tetration.CreateInventoryFiltersFromCsv(rc,scopes,filename)
     # Push Filters to Tetration
+    logger.info("Pushing filters to tetration")
     tetration.PushInventoryFilters(rc,inventoryFilters)
+    logger.info("Filters successfully pushed to tetration")
 
 def create_network_filters(params):
     # Get Scopes
@@ -162,24 +164,32 @@ def create_network_filters(params):
         logger.info("Creating inventory filters from networks in csv: " + params["csvParams"]["filename"])
         inventoryFilters = tetration.CreateInventoryFiltersFromApi(rc,scopes,params['apiParams'])
     # Push Filters to Tetration
+    logger.info("Pushing filters to tetration")
     tetration.PushInventoryFilters(rc,inventoryFilters)
+    logger.info("Filters successfully pushed to tetration")
 
 def annotate_hosts(params):
+    logger.info("Creating host annotations")
     hosts = []
     # Read hosts from networks listed in csv
     if params["type"] == 'csv':
+        logger.info("Reading network list from csv:" + params["csvParams"]["importFilename"])
         with open(params["csvParams"]["importFilename"], "rb") as csvFile:
             reader = csv.DictReader(csvFile)
             for row in reader:
+                # Read all hosts with a name defined
                 hosts.extend(conn.get_object('ipv4address',{'network': row["Network"], 'names~': '.*', '_return_fields': 'network,network_view,names,ip_address,extattrs'}))
-    # Read all hosts with a name defined
     else:
+        logger.info("Getting all networks from infoblox for view:" + params["view"])
         networks = conn.get_object('network',{'network_view': params["view"]} if params["view"] != '' else None)
         for network in [network["network"] for network in networks]:
+            # Read all hosts with a name defined
             host_obj = conn.get_object('ipv4address',{'network': network,'names~': '.*', '_return_fields': 'network,network_view,names,ip_address,extattrs'} if params["view"] == '' else {'network': network, 'names~': '.*', '_return_fields': 'network,network_view,names,ip_address,extattrs','network_view': params["view"]})
             if host_obj is not None:
                 hosts.extend(host_obj)
+    logger.info("Creating annotations for selected networks")
     tetration.AnnotateHosts(rc,hosts,params)
+    logger.info("Host annotation updates complete")
 
 def main():
     parser = argparse.ArgumentParser(description='Tetration Infoblox Integration Script')
