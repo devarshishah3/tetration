@@ -90,6 +90,8 @@ def create_network_csv(filename):
 
 def import_extensible_attributes(filename,eaName,eaValue):
     networks = []
+    logger.debug("Inside import extensible attributes")
+    logger.debug("Opening CSV file named:" + filename)
     with open(filename, "rb") as csvFile:
             reader = csv.DictReader(csvFile)
             for row in reader:
@@ -101,6 +103,7 @@ def import_extensible_attributes(filename,eaName,eaValue):
     s.headers['Content-Type'] = 'application/json'
     
     for network in networks:
+        logger.info("Retrieving network:" + network["Network"] + " from infoblox")
         netObj = conn.get_object('network',{'network': network["Network"],'network_view': network["Network View"]})
         req_payload = {
             "extattrs": {
@@ -113,30 +116,51 @@ def import_extensible_attributes(filename,eaName,eaValue):
                 }
             }
         }
+        logger.info("Adding EA: " + eaName + " with value:" + eaValue + " to network:" + network["Network"])
         resp = s.put(url + netObj[0]["_ref"],data=json.dumps(req_payload))
         if resp.status_code != 200:
-            print("Error while applying extensible attribute: " + eaName)
+            logger.error("Error while applying extensible attribute: " + eaName)
         else:
-            print("Extensible attribute: " + eaName + " added to addresses in" + network["Network"])
+            logger.info("Extensible attribute: " + eaName + " added to addresses in" + network["Network"])
+
+def push_network_filters(filename):
+    # Get Scopes
+    logger.info("Creating network filters")
+    logger.debug("Getting application scopes from tetration")
+    scopes = tetration.GetApplicationScopes(rc)
+
+    logger.info("Creating inventory filters from csv")
+    inventoryFilters = tetration.CreateInventoryFiltersFromCsv(rc,scopes,filename)
+    # Push Filters to Tetration
+    tetration.PushInventoryFilters(rc,inventoryFilters)
 
 def create_network_filters(params):
     # Get Scopes
+    logger.info("Creating network filters")
+    logger.debug("Getting application scopes from tetration")
     scopes = tetration.GetApplicationScopes(rc)
     # Get defined networks
     networks = []
-    logger.info("Getting networks from infoblox")
-    networks = conn.get_object('network',{'network_view': params["view"]} if params["view"] != '' else None)
-    if networks is None:
-        logger.warn("No networks were found in network view: " + params["view"])
-        return
-    # Find networks with a comment defined
-    network_list = [network for network in networks if 'comment' in network]
-    # Create API Query for creating inventory filters
-    if params["type"].lower() == 'api':
+    if params["type"].lower() == 'all':
+        logger.info("Getting all networks from infoblox")
+        networks = conn.get_object('network',{'network_view': params["view"]} if params["view"] != '' else None)
+        if networks is None:
+            logger.warning("No networks were found in network view: " + params["view"])
+            return
+        # Find networks with a comment defined
+        network_list = [network for network in networks if 'comment' in network]
+        # Create API Query for creating inventory filters
+        logger.info("Creating tetration inventory filters from API")
         inventoryFilters = tetration.CreateInventoryFiltersFromApi(rc,scopes,network_list,params['apiParams'])
     else:
-        inventoryFilters = tetration.CreateInventoryFiltersFromCsv(rc,scopes,params['csvParams'])
-    PrettyPrint(inventoryFilters)
+        with open(params["csvParams"]["filename"], "rb") as csvFile:
+            reader = csv.DictReader(csvFile)
+            for row in reader:
+                logger.info("Getting network:" + row["Network"] + " from infoblox")
+                networks.extend(conn.get_object('network',{'network': row["Network"], 'network_view': row["Network View"]}))
+        network_list = [network for network in networks if 'comment' in network]
+        logger.info("Creating inventory filters from networks in csv: " + params["csvParams"]["filename"])
+        inventoryFilters = tetration.CreateInventoryFiltersFromApi(rc,scopes,params['apiParams'])
     # Push Filters to Tetration
     tetration.PushInventoryFilters(rc,inventoryFilters)
 
@@ -160,6 +184,7 @@ def annotate_hosts(params):
 def main():
     parser = argparse.ArgumentParser(description='Tetration Infoblox Integration Script')
     parser.add_argument('--createFilterCsv', help='Filename for creating Filter Csv')
+    parser.add_argument('--pushFilterCsv', help='Filename of csv containing filters to be manually pushed to tetration')
     parser.add_argument('--createNetworkCsv', help='Filename for creating extensible attributes csv')
     parser.add_argument('--importEaCsv', help='Filename for importing extensible attributes from csv')
     parser.add_argument('--importEaName', help='Extensible attribute name')
@@ -170,6 +195,10 @@ def main():
     if args.createFilterCsv is not None:
         logger.info("Creating filter csv")
         create_filter_csv(args.createFilterCsv)
+
+    if args.pushFilterCsv is not None:
+        logger.info("Creating filter csv")
+        push_network_filters(args.pushFilterCsv)
 
     if args.createNetworkCsv is not None:
         logger.info("Creating network csv")

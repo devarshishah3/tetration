@@ -53,9 +53,9 @@ def CreateInventoryFiltersFromApi(rc,scopes,network_list,params):
         })
     return inventoryDict
 
-def CreateInventoryFiltersFromCsv(rc,scopes,params):
+def CreateInventoryFiltersFromCsv(rc,scopes,filename):
     inventoryDict = {}
-    with open(params["filename"]) as csvfile:
+    with open(filename) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             if row['Comment'] not in inventoryDict:
