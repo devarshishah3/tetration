@@ -1,0 +1,59 @@
+# WAPI Connection Properties
+infoblox:
+  wapi_version: '2.5'
+  paging: True
+  max_results: 500
+  limit: 1
+  host: ip or hostname of infoblox ##
+  username: username ##
+  password: password ##
+
+# Tetration Connection Properties
+tetration:
+  url: https://tetrationcluster.domain.com
+  credential: credentials.json
+
+# Actions
+actions:
+  create_network_filters: # Stream inventory filters to tetration
+    enabled: False  ## True or False
+    type: 'api' ## api or csv
+    view: '' ## network view to limit filters
+    apiParams: ## params used if type is set to api
+      parentScope: 'Default' ## Tetration parent scope of inventory filters
+      restricted: True ## Restrict inventory filters to parent scope?
+    csvParams: ## params used if type is set to csv 
+      filename: 'network_list.csv' ## csv filename containing list of networks for creating inventory filters
+  annotate_hosts: # stream annotations to tetration
+    enabled: True ## True or False
+    type: 'csv' # all or csv
+    view: 'default' ## network view to limit filters
+    csvParams:
+      importFilename: 'ea.csv'
+      exportFilename: 'infoblox_annotations.csv'
+    vrf:
+      type: 'static' # static or ea
+      value: 'Default' # static value or name of extensible attribute
+      eaName: 'Tetration-VRF'
+    columns: # columns for host annotations
+      annotate_hostnames:
+        enabled: True
+        annotationName: 'Infoblox Hostname'
+        infobloxName: 'names'
+      annotate_view:
+        enabled: True
+        annotationName: 'Infoblox View'
+        infobloxName: 'network_view'
+      annotate_parent:
+        enabled: True
+        annotationName: 'Infoblox Parent'
+        infobloxName: 'network'
+      annotate_extensible_attributes:
+        enabled: True
+        overload: True # True or False
+        infobloxName: 'extattrs'
+        annotationName: 'Infoblox EA' # prefix for tetration annotations if not overloading (Full annotation name if overloading is true).  Ex: Infoblox EA-location
+        attributeList:
+          - Location
+          - Lifecycle
+          - Tetration-VRF
