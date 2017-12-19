@@ -33,7 +33,7 @@ def create_filter_csv(filename):
         for line in network_list:
             writer.writerow([line["network"],line["comment"],'Default','TRUE'])
 
-def create_ea_csv(filename):
+def create_network_csv(filename):
     networks = conn.get_object('network')
     with open(filename, "wb") as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
@@ -114,7 +114,7 @@ def annotate_hosts(params):
 def main():
     parser = argparse.ArgumentParser(description='Tetration Infoblox Integration Script')
     parser.add_argument('--createFilterCsv', help='Filename for creating Filter Csv')
-    parser.add_argument('--createEaCsv', help='Filename for creating extensible attributes csv')
+    parser.add_argument('--createNetworkCsv', help='Filename for creating extensible attributes csv')
     parser.add_argument('--importEaCsv', help='Filename for importing extensible attributes from csv')
     parser.add_argument('--importEaName', help='Extensible attribute name')
     parser.add_argument('--importEaValue', help='Extensible attribute value to be applied to network(s)')
@@ -124,8 +124,8 @@ def main():
     if args.createFilterCsv is not None:
         create_filter_csv(args.createFilterCsv)
 
-    if args.createEaCsv is not None:
-        create_ea_csv(args.createEaCsv)
+    if args.createNetworkCsv is not None:
+        create_ea_csv(args.createNetworkCsv)
 
     if args.importEaCsv is not None:
         if args.importEaName is None:
