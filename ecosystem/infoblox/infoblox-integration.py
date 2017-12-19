@@ -15,7 +15,7 @@ import netaddr
 # ====================================================================================
 # Logging
 # ------------------------------------------------------------------------------------
-LOG_FILENAME = os.path.dirname(os.path.realpath("__file__")) + "/log/infoblox-integration.log"
+LOG_FILENAME = os.path.dirname(os.path.realpath("__file__")) + "/logs/infoblox-integration.log"
 LOG_LEVEL = logging.INFO  # Could be e.g. "DEBUG" or "WARNING"
 
 # Configure logging to log to a file, making a new file at midnight and keeping the last 3 day's data
