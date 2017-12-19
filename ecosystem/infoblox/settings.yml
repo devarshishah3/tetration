@@ -28,7 +28,7 @@ actions:
     type: 'csv'                                  ## all or csv. csv limits annotations to networks defined within the specified csv.  all annotates all hosts
     view: 'default'                              ## network view to limit filters
     csvParams:
-      importFilename: 'ea.csv'                   ## csv filename containing list of networks for creating annotations
+      importFilename: 'networks.csv'                   ## csv filename containing list of networks for creating annotations
       exportFilename: 'infoblox_annotations.csv' ## csv filename for exported annotations sent to tetration
     vrf:
       type: 'static'                             ## static or ea
