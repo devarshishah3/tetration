@@ -12,6 +12,46 @@ import requests
 from requests.auth import HTTPBasicAuth
 import netaddr
 
+# ====================================================================================
+# Logging
+# ------------------------------------------------------------------------------------
+LOG_FILENAME = os.path.dirname(os.path.realpath("__file__")) + "/log/infoblox-integration.log"
+LOG_LEVEL = logging.INFO  # Could be e.g. "DEBUG" or "WARNING"
+
+# Configure logging to log to a file, making a new file at midnight and keeping the last 3 day's data
+# Give the logger a unique name (good practice)
+logger = logging.getLogger(__name__)
+# Set the log level to LOG_LEVEL
+logger.setLevel(LOG_LEVEL)
+# Make a handler that writes to a file, making a new file at midnight and keeping 3 backups
+handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME, when="midnight", backupCount=3)
+# Format each log message like this
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
+# Attach the formatter to the handler
+handler.setFormatter(formatter)
+# Attach the handler to the logger
+logger.addHandler(handler)
+
+# Make a class we can use to capture stdout and sterr in the log
+class MyLogger(object):
+        def __init__(self, logger, level):
+                """Needs a logger and a logger level."""
+                self.logger = logger
+                self.level = level
+
+        def write(self, message):
+                # Only log if there is a message (not just a new line)
+                if message.rstrip() != "":
+                        self.logger.log(self.level, message.rstrip())
+
+# Replace stdout with logging to file at INFO level
+sys.stdout = MyLogger(logger, logging.INFO)
+# Replace stderr with logging to file at ERROR level
+sys.stderr = MyLogger(logger, logging.ERROR)
+
+# ====================================================================================
+# GLOBALS
+# ------------------------------------------------------------------------------------
 # Read in settings
 settings = yaml.load(open('settings.yml'))
 # Connect to infoblox
@@ -19,27 +59,34 @@ conn = connector.Connector(settings['infoblox'])
 # Connect to tetration   
 rc = tetration.CreateRestClient(settings['tetration'])
 
+# Debug function used for printing formatted dictionaries
 def PrettyPrint(target):
     print json.dumps(target,sort_keys=True,indent=4)
 
 def create_filter_csv(filename):
     # Get defined networks
+    logger.info("Getting networks from infoblox")
     networks = conn.get_object('network')
     # Find networks with a comment defined
     network_list = [network for network in networks if 'comment' in network]
+    logger.info("Writing filter csv to file:" + filename)
     with open(filename, "wb") as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow('Network,Comment,ParentScope,Restricted'.split(','))
         for line in network_list:
             writer.writerow([line["network"],line["comment"],'Default','TRUE'])
+    logger.info("Create filter csv complete")
 
 def create_network_csv(filename):
+    logger.info("Getting networks from infoblox")
     networks = conn.get_object('network')
+    logger.info("Writing network csv to file:" + filename)
     with open(filename, "wb") as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow('Network View,Network,Comment'.split(','))
         for line in networks:
             writer.writerow([line["network_view"],line["network"],line["comment"] if "comment" in line else ''])
+    logger.info("Create network csv complete")
 
 def import_extensible_attributes(filename,eaName,eaValue):
     networks = []
@@ -77,10 +124,10 @@ def create_network_filters(params):
     scopes = tetration.GetApplicationScopes(rc)
     # Get defined networks
     networks = []
+    logger.info("Getting networks from infoblox")
     networks = conn.get_object('network',{'network_view': params["view"]} if params["view"] != '' else None)
-    print networks
     if networks is None:
-        print("No networks were found in network view: " + params["view"])
+        logger.warn("No networks were found in network view: " + params["view"])
         return
     # Find networks with a comment defined
     network_list = [network for network in networks if 'comment' in network]
@@ -101,7 +148,6 @@ def annotate_hosts(params):
             reader = csv.DictReader(csvFile)
             for row in reader:
                 hosts.extend(conn.get_object('ipv4address',{'network': row["Network"], 'names~': '.*', '_return_fields': 'network,network_view,names,ip_address,extattrs'}))
-                # PrettyPrint(hosts)
     # Read all hosts with a name defined
     else:
         networks = conn.get_object('network',{'network_view': params["view"]} if params["view"] != '' else None)
@@ -122,15 +168,18 @@ def main():
 
     # Create CSV for defining inventory filters
     if args.createFilterCsv is not None:
+        logger.info("Creating filter csv")
         create_filter_csv(args.createFilterCsv)
 
     if args.createNetworkCsv is not None:
-        create_ea_csv(args.createNetworkCsv)
+        logger.info("Creating network csv")
+        create_network_csv(args.createNetworkCsv)
 
     if args.importEaCsv is not None:
         if args.importEaName is None:
             print("Extensible attribute name required (--importEaName)")
             return
+        logger.info("Importing extensible attribute for list of networks")
         import_extensible_attributes(args.importEaCsv,args.importEaName,args.importEaValue)
 
     if not len(sys.argv) > 1:
