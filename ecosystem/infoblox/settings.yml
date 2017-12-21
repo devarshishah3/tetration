@@ -3,8 +3,8 @@ infoblox:
   wapi_version: '2.5'                            ## DO NOT MODIFY
   paging: True                                   ## DO NOT MODIFY
   max_results: 500                               ## DO NOT MODIFY
-  host: 172.16.1.98                              ## Hostname or IP of infoblox
-  username: user                             ## Infoblox username (read-only)
+  host: ip of infoblox                           ## Hostname or IP of infoblox
+  username: user                                 ## Infoblox username (read-only)
   password: password                             ## Infoblox password
 
 # Tetration Connection Properties
