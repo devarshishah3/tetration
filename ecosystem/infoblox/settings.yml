@@ -4,8 +4,8 @@ infoblox:
   paging: True                                   ## DO NOT MODIFY
   max_results: 500                               ## DO NOT MODIFY
   host: 172.16.1.98                              ## Hostname or IP of infoblox
-  username: loyevans                             ## Infoblox username (read-only)
-  password: +Scrumadum3dum3+                             ## Infoblox password
+  username: user                             ## Infoblox username (read-only)
+  password: password                             ## Infoblox password
 
 # Tetration Connection Properties
 tetration:
