@@ -3,14 +3,14 @@ infoblox:
   wapi_version: '2.5'                            ## DO NOT MODIFY
   paging: True                                   ## DO NOT MODIFY
   max_results: 500                               ## DO NOT MODIFY
-  host: 172.16.1.98                              ## Hostname or IP of infoblox
-  username: loyevans                             ## Infoblox username (read-only)
-  password: +Scrumadum3dum3+                             ## Infoblox password
+  host: ip or hostname of infoblox               ## Hostname or IP of infoblox
+  username: username                             ## Infoblox username (read-only)
+  password: password                             ## Infoblox password
 
 # Tetration Connection Properties
 tetration:
-  url: https://perseus-aus.cisco.com             ## Tetration URL
-  credential: tetcreds.json                      ## Tetration credential json file
+  url: https://tetrationcluster.domain.com       ## Tetration URL
+  credential: credentials.json                   ## Tetration credential json file
 
 # Actions
 actions:
