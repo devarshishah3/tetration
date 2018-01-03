@@ -1,0 +1,14 @@
+{
+    "vcenter": {
+        "url": "https://vcenter.domain.com/sdk",
+        "username": "someone@domain.com",
+        "password": "",
+        "datacenter": "Example-DC"
+    },
+    "tetration": {
+        "url":"https://tetrationcluster.domain.com",
+        "key":"",
+        "secret":""
+    },
+    "insecure": true
+}
