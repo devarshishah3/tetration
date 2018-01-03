@@ -20,7 +20,7 @@ This script requires the following non-standard Go packages
 
 To install all go requirements issue the following command:
 <pre>
-go get main.go
+go get github.com/techBeck03/tetration/ecosystem/vmware
 </pre>
 
 ## How to use the Script
