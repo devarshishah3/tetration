@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	goh4 "github.com/remiphilippe/goh4"
+	goh4 "github.com/techBeck03/tetration/ecosystem/vmware/go-h4"
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/event"
 	"github.com/vmware/govmomi/find"
