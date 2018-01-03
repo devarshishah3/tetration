@@ -2,6 +2,8 @@
 
 This script provides a set of manual and automated actions for creating and streaming inventory filters and user annotations to Tetration from Infoblox
 
+Before you start, rename the file <pre>example_settings.yml</pre> to <pre>settings.yml</pre> and edit it to match your credentials.
+
 ## Pre-requisites
 *Python 2.7.x*
 
@@ -14,6 +16,17 @@ To install all pip requirements issue the following command within your virtuale
 <pre>
 pip install -r requirements.txt
 </pre>
+
+Some notes about the above command. If you run it and find that it fails saying that it cannot find Python.h, you may need to install a further dependency. If you are using redhat/centos, you can satisfy this requirement by installing python-devel:
+<pre>
+sudo yum install python-devel
+</pre>
+If you are using a debian distro (such as ubuntu), install as such:
+<pre>
+sudo apt-get install python-devel
+</pre>
+
+If you plan to run this as a continually updating script, you may want to install the requirements not in a virtualenv, but just built to suit.
 
 ## How to use the Script
 
