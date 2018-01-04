@@ -18,7 +18,13 @@ This script requires the following non-standard Go packages
 - github.com/vmware/govmomi/vim25/types
 - golang.org/x/net/context
 
-To install all go requirements issue the following command:
+## Installation
+First, clone this git repository
+<pre>
+git clone https://github.com/techBeck03/tetration.git
+</pre>
+
+Next, install all go requirements issue the following command:
 <pre>
 go get github.com/techBeck03/tetration/ecosystem/vmware
 </pre>
