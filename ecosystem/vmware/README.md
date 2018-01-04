@@ -24,7 +24,7 @@ First, clone this git repository
 git clone https://github.com/techBeck03/tetration.git
 </pre>
 
-Next, install all go requirements issue the following command:
+Next, install all go requirements with the following command:
 <pre>
 go get github.com/techBeck03/tetration/ecosystem/vmware
 </pre>
