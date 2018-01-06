@@ -3,7 +3,7 @@
 This script creates inventory annotations from a specified vCenter datacenter.  Annotations can be created for all VMs using the initFlag and dynamically updated based on subscribed vCenter events using the subscribeFlag.
 
 ## Pre-requisites
-*Golang*
+### Golang
 
 Golang install doc https://golang.org/doc/install
 
