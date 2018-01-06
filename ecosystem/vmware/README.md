@@ -43,7 +43,27 @@ There are two types of actions that can be performed:
     * VM Name Changed
     * vMotion Occurred
 
-## Usage Examples
+### Configure Connection Settings
+Before running the script edit the example.settings.json and rename to settings.json
+
+<pre>
+{
+    "vcenter": {
+        "url": "https://vcenter.domain.com/sdk",
+        "username": "someone@domain.com",
+        "password": "",
+        "datacenter": "Example-DC"
+    },
+    "tetration": {
+        "url":"https://tetrationcluster.domain.com",
+        "key":"",
+        "secret":""
+    },
+    "insecure": true
+}
+</pre>
+
+### Usage Examples
 *Initialize Annotations*
 <pre>
 go run main.go -init
