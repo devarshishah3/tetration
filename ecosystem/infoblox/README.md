@@ -39,7 +39,7 @@ cd tetration/ecosystem/infoblox
 
 This Script supports two types of modes
 
-1. Manual setup actions: (One time tasks for setting up initial integration):
+1. Manual setup actions: (One time tasks for setting up initial integration)
     * creating inventory filter csv file
     * exporting networks from infoblox to csv
     * associating inheritable extensible attributes with parent networks
