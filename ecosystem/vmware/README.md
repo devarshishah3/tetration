@@ -22,6 +22,7 @@ This script requires the following non-standard Go packages
 First, clone this git repository
 <pre>
 git clone https://github.com/techBeck03/tetration.git
+cd tetration/ecosystem/vmware
 </pre>
 
 Next, install all go requirements with the following command:
