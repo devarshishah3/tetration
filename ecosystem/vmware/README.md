@@ -64,17 +64,17 @@ Before running the script edit the example.settings.json and rename to settings.
 </pre>
 
 ### Usage Examples
-*Initialize Annotations*
+Initialize Annotations
 <pre>
 go run main.go -init
 </pre>
 
-*Subscribe to vCenter events for dynamic annotation updates*
+Subscribe to vCenter events for dynamic annotation updates
 <pre>
 go run main.go -subscribe
 </pre>
 
-*Initialize Annotations and Subscribe to vCenter Events*
+Initialize Annotations and Subscribe to vCenter Events
 <pre>
 go run main.go -init -subscribe
 </pre>
