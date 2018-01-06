@@ -29,10 +29,10 @@ sudo apt-get install python-devel
 If you plan to run this as a continually updating script, you may want to install the requirements not in a virtualenv, but just built to suit.
 
 ## Installation
-Clone this git repository and cd to the vmware directory
+Clone this git repository and cd to the infoblox directory
 <pre>
 git clone https://github.com/techBeck03/tetration.git
-cd tetration/ecosystem/vmware
+cd tetration/ecosystem/infoblox
 </pre>
 
 ## How to use the Script
