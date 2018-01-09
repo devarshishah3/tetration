@@ -26,13 +26,20 @@ sudo apt-get install python-devel
 
 If you plan to run this as a continually updating script, you may want to install the requirements not in a virtualenv, but just built to suit.
 
+## Installation
+Clone this git repository and cd to the infoblox directory
+<pre>
+git clone https://github.com/techBeck03/tetration.git
+cd tetration/ecosystem/infoblox
+</pre>
+
 ## How to use the Script
 
 Before you start, rename the file <pre>example_settings.yml</pre> to <pre>settings.yml</pre> and edit it to match your credentials.
 
 This Script supports two types of modes
 
-1. Manual setup actions: (One time tasks for setting up initial integration):
+1. Manual setup actions: (One time tasks for setting up initial integration)
     * creating inventory filter csv file
     * exporting networks from infoblox to csv
     * associating inheritable extensible attributes with parent networks

@@ -3,7 +3,7 @@
 This script creates inventory annotations from a specified vCenter datacenter.  Annotations can be created for all VMs using the initFlag and dynamically updated based on subscribed vCenter events using the subscribeFlag.
 
 ## Pre-requisites
-*Golang*
+### Golang
 
 Golang install doc https://golang.org/doc/install
 
@@ -22,6 +22,7 @@ This script requires the following non-standard Go packages
 First, clone this git repository
 <pre>
 git clone https://github.com/techBeck03/tetration.git
+cd tetration/ecosystem/vmware
 </pre>
 
 Next, install all go requirements with the following command:
@@ -43,18 +44,38 @@ There are two types of actions that can be performed:
     * VM Name Changed
     * vMotion Occurred
 
-## Usage Examples
-*Initialize Annotations*
+### Configure Connection Settings
+Before running the script edit the example.settings.json and rename to settings.json
+
+<pre>
+{
+    "vcenter": {
+        "url": "https://vcenter.domain.com/sdk",
+        "username": "someone@domain.com",
+        "password": "",
+        "datacenter": "Example-DC"
+    },
+    "tetration": {
+        "url":"https://tetrationcluster.domain.com",
+        "key":"",
+        "secret":""
+    },
+    "insecure": true
+}
+</pre>
+
+### Usage Examples
+Initialize Annotations
 <pre>
 go run main.go -init
 </pre>
 
-*Subscribe to vCenter events for dynamic annotation updates*
+Subscribe to vCenter events for dynamic annotation updates
 <pre>
 go run main.go -subscribe
 </pre>
 
-*Initialize Annotations and Subscribe to vCenter Events*
+Initialize Annotations and Subscribe to vCenter Events
 <pre>
 go run main.go -init -subscribe
 </pre>
