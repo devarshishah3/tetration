@@ -30,6 +30,34 @@ def GetAppScopeId(scopes,name):
     except:
         print("App Scope {name} not found".format(name=name))
 
+'''
+====================================================================================
+Get all inventory
+------------------------------------------------------------------------------------
+'''
+def GetInventory(rc,offset):
+    req_payload = {
+        "filter": {
+            "type": "or",
+            "filters": [
+                {
+                    "type": "contains",
+                    "field": "ip",
+                    "value": "."
+                }
+            ]
+        },
+        "limit": 200,
+        "offset": offset if offset else ""
+    }
+    resp = rc.post('/inventory/search',json_body=json.dumps(req_payload))
+    if resp.status_code != 200:
+        print(resp.status_code)
+        print(resp.text)
+        exit(0)
+    else:
+        return resp.json()
+
 def CreateInventoryFiltersFromApi(rc,scopes,network_list,params):
     inventoryDict = {}
     for row in network_list:
@@ -129,6 +157,7 @@ def AnnotateHosts(rc,hosts,params):
                 else:
                     hostDict[column["annotationName"]] = ",".join(host[column["infobloxName"]]).split('.')[0] if type(host[column["infobloxName"]]) is list else host[column["infobloxName"]]
             writer.writerow(hostDict)
+    keys = ['IP', 'VRF']
     req_payload = [tetpyclient.MultiPartOption(key='X-Tetration-Key', val=keys), tetpyclient.MultiPartOption(key='X-Tetration-Oper', val='add')]
     resp = rc.upload(params["csvParams"]["exportFilename"], '/assets/cmdb/upload', req_payload)
     if resp.status_code != 200:

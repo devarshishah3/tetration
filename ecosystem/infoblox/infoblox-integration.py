@@ -12,6 +12,7 @@ import sys
 import requests
 from requests.auth import HTTPBasicAuth
 import netaddr
+import time
 
 # ====================================================================================
 # Logging
@@ -191,6 +192,29 @@ def annotate_hosts(params):
     logger.info("Creating annotations for selected networks")
     tetration.AnnotateHosts(rc,hosts,params)
     logger.info("Host annotation updates complete")
+
+def get_undocumented_inventory():
+    ibc = infoblox.Infoblox(settings['infoblox'],logger)
+    offset = ""
+    while True:
+        inventory = tetration.GetInventory(rc,offset)
+        query_list = []
+        for host in inventory["results"]:
+            query_list.append({
+                "method": "GET",
+                "object": "ipv4addr",
+                "data": {
+                    "ip_address": host["ip"]
+                }
+            })
+        resp = ibc.requestMultiple(query_list)
+        print resp
+        input("Press Enter to continue...")
+        try:
+            offset = unnamed_hosts["offset"]
+        except:
+            break
+        time.sleep(2)
 
 def main():
     parser = argparse.ArgumentParser(description='Tetration Infoblox Integration Script')

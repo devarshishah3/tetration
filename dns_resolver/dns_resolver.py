@@ -25,6 +25,7 @@ TETRATION_API_CRED_PATH = '<tetration credential file>.json'
 TETRATION_HOST_NAME_USER_ANNOTATION = 'Hostname'
 TETRATION_SCOPE_NAME = 'Default'
 TETRATION_SEARCH_LIMIT = 20
+DNS_SERVERS = [] # Example ['8.8.8.8','8.8.1.1']
 
 parser = argparse.ArgumentParser(description='Tetration API Demo Script')
 parser.add_argument('--url', help='Tetration URL', required=False)
@@ -39,6 +40,11 @@ TETRATION_API_CRED_PATH = args.credential if args.credential else TETRATION_API_
 TETRATION_HOST_NAME_USER_ANNOTATION = args.annotation if args.annotation else TETRATION_HOST_NAME_USER_ANNOTATION
 TETRATION_SCOPE_NAME = args.scope if args.scope else TETRATION_SCOPE_NAME
 TETRATION_SEARCH_LIMIT = args.limit if args.limit else TETRATION_SEARCH_LIMIT
+
+resolver = dns.resolver.Resolver()
+
+if len(DNS_SERVERS) > 0:
+    resolver.nameservers = DNS_SERVERS
 
 '''
 ====================================================================================
@@ -95,7 +101,7 @@ def ResolveUnnamedHosts(inventoryList):
     for host in inventoryList:
         try:
             addr = dns.reversename.from_address(host["ip"])
-            host_name = str(dns.resolver.query(addr,"PTR")[0])
+            host_name = str(resolver.query(addr,"PTR")[0])
             host.update({"user_" + TETRATION_HOST_NAME_USER_ANNOTATION: host_name[:-1] })
             resolved_hosts.append(host)
         except:
